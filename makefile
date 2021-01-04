@@ -1,11 +1,11 @@
 CC=g++
 CFLAGS=-c -Wall -Werror
-LDFLAGS=-std=c99
-CLIENT_SOURCES=client.cpp
+LDFLAGS=-std=c++11
+CLIENT_SOURCES=client.cpp package.cpp logger.cpp format.cpp
 CLIENT_OBJECTS=$(CLIENT_SOURCES:.cpp=.o)
 CLIENT_EXECUTABLE=udp_client
 
-SERVER_SOURCES=server.cpp
+SERVER_SOURCES=server.cpp package.cpp file_builder.cpp logger.cpp format.cpp
 SERVER_OBJECTS=$(SERVER_SOURCES:.cpp=.o)
 SERVER_EXECUTABLE=udp_server
 

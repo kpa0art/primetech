@@ -8,6 +8,7 @@
 #include <iostream>
 #include <unistd.h>
 #include <fstream>
+#include <vector>
 
 #include "common.h"
 #include "package.h"
@@ -32,12 +33,13 @@ private:
     int m_port;
     std::string m_addr;
     addrinfo *m_addrinfo;
+    std::ifstream ifs;
 
     int send(const char *data, int len);
-    
-    // void pack_package_number(char *buf, int *len, int32_t pkg_num);
-    // void pack_package_marker(char *buf, int *len, int32_t marker);
-    // void pack_data(char *buf, int *buf_len, char *data, int data_len);
+
+    int send_file_name(uint32_t marker, const std::string& filename);
+
+    int send_file_data(uint32_t marker, std::ifstream& ifs);
 };
 
 #endif
