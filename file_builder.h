@@ -16,10 +16,10 @@
 using namespace std::chrono;
 
 enum errors {
-    ErrDublicate,
-    ErrEmptyFileName,
-    ErrCouldNotOpenFile,
-    ErrCould
+    ErrInvalidFileName    = -2,
+    ErrExpectPackage      = -3,
+    ErrCouldNotCreateFile = -5,
+    ErrErrno              = -4
 };
 
 class FileBuilder {
@@ -29,8 +29,6 @@ public:
     ~FileBuilder();
 
     void insert_package(Package&& package);
-
-    void try_writing();
 
     bool file_is_ready() const;
 
@@ -42,18 +40,24 @@ public:
 
     int complete();
 
+    // int create_file();
+
+    bool file_is_open();
+
+    int process();
 private:
     uint32_t m_marker;
     uint32_t m_last_writed_pkg_number;
-    bool  m_file_is_ready;
     bool  m_file_name_is_ready;
+    bool  m_file_body_is_ready;
+    bool  m_file_is_created;
     std::string m_dir;
-    std::string m_filename;
     time_point<system_clock> m_last_writing_package_time;
     std::priority_queue<Package> m_pkg_queue;
     std::ofstream m_fout;
 
-    bool has_next() const;
+    std::string m_origin_filename;
+    std::string m_tmp_filename;
 
-    void initialize_file(const std::string& filename);
+    bool has_next_package() const;
 };

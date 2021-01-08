@@ -1,6 +1,15 @@
 #include "format.h"
 #include <iomanip>
 
+/** \brief Форматирование времени в стрим
+ * 
+ * Функция форматирует структуру tm библиотеки <ctime> в строковый тип
+ * 
+ * \param[in] os   Объект выходной потоковый стрима.
+ * \param[in] dt   Время.
+ * 
+ * \return Ссылка на выходной потоковый стрим.
+ */ 
 std::ostream& operator<<(std::ostream& os, std::tm *dt)
 {
     return os

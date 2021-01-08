@@ -9,7 +9,7 @@ class Logger: public std::ostream
 public:
     Logger();
 
-    Logger(const std::string& file_name);
+    Logger(const std::string& filename);
 
     bool file_is_open();
 
@@ -30,6 +30,6 @@ private:
     friend class Buffer;
 
     Buffer m_buffer;
-    std::string m_file_name;
+    std::string m_filename;
     std::ofstream m_ofs;   
 };

@@ -13,9 +13,12 @@
 #include "common.h"
 #include "package.h"
 
+
+
 class Client
 {
 public:
+
     Client(const std::string &addr, int port);
 
     ~Client();
@@ -28,6 +31,8 @@ public:
 
     int send_file(const std::string& filename );
 
+    char* strerror(int result);
+
 private:
     int m_socket;
     int m_port;
@@ -37,7 +42,7 @@ private:
 
     int send(const char *data, int len);
 
-    int send_file_name(uint32_t marker, const std::string& filename);
+    int send_filename(uint32_t marker, const std::string& filename);
 
     int send_file_data(uint32_t marker, std::ifstream& ifs);
 };

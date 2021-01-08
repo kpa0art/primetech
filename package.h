@@ -8,19 +8,20 @@
 #include <malloc.h>
 #include <iostream>
 
-#define MAX_PACKAGE_SIZE 1400
+//#define DEBUG
+
+#define MAX_PACKAGE_SIZE      1400
 
 #define HEADER_NUMBER_SIZE    sizeof(uint32_t)
 #define HEADER_NUMBER_OFFSET  0
 #define HEADER_MARKER_SIZE    sizeof(uint32_t)
-#define HEADER_MARKER_OFFSET  HEADER_NUMBER_OFFSET + HEADER_NUMBER_SIZE
+#define HEADER_MARKER_OFFSET  (HEADER_NUMBER_OFFSET + HEADER_NUMBER_SIZE)
 #define HEADER_FLAG_SIZE      sizeof(uint8_t)
-#define HEADER_FLAG_OFFSET    HEADER_MARKER_OFFSET + HEADER_MARKER_SIZE
+#define HEADER_FLAG_OFFSET    (HEADER_MARKER_OFFSET + HEADER_MARKER_SIZE)
 
-#define HEADER_SIZE   HEADER_NUMBER_SIZE + HEADER_MARKER_SIZE + HEADER_FLAG_SIZE
-#define DATA_OFFSET   HEADER_SIZE
-#define MAX_DATA_SIZE MAX_PACKAGE_SIZE - HEADER_NUMBER_SIZE - HEADER_MARKER_SIZE
-
+#define HEADER_SIZE           (HEADER_NUMBER_SIZE + HEADER_MARKER_SIZE + HEADER_FLAG_SIZE)
+#define DATA_OFFSET           HEADER_SIZE
+#define MAX_DATA_SIZE         (MAX_PACKAGE_SIZE - HEADER_SIZE)
 #define FLAG_LAST_PACKAGE     1
 #define FLAG_NOT_LAST_PACKAGE 0
 
@@ -77,6 +78,8 @@ private:
     void initialize(uint32_t package_size = MAX_PACKAGE_SIZE);
 };
 
+#ifdef DEBUG
 void print_headers_as_row();
 
 void print_package_as_row(Package &pkg);
+#endif
