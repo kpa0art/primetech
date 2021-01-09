@@ -1,6 +1,0 @@
-#include que
-
-class File {
-
-    
-}
