@@ -11,7 +11,6 @@
 #include <map>
 #include <arpa/inet.h>
 
-#include "common.h"
 #include "package.h"
 #include "file_builder.h"
 #include "logger.h"

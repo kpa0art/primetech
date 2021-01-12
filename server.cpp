@@ -61,16 +61,16 @@ Server::Server(const std::string &addr, int port, const std::string &dirname, Lo
     hint.ai_protocol = IPPROTO_UDP;
     std::string s_port = std::to_string(port);
     int status = getaddrinfo(addr.c_str(), s_port.c_str(), &hint, &m_addrinfo);
-    if (status != SUCCESS || m_addrinfo == nullptr)
+    if (status != 0 || m_addrinfo == nullptr)
         throw std::runtime_error("invalid address or port");
     m_socket = socket(m_addrinfo->ai_family, SOCK_DGRAM, IPPROTO_UDP);
-    if (m_socket == INVALID_SOCKET)
+    if (m_socket < 0)
     {
         freeaddrinfo(m_addrinfo);
         throw std::runtime_error("could not create socket\n");
     }
     status = bind(m_socket, m_addrinfo->ai_addr, m_addrinfo->ai_addrlen);
-    if ( status != SUCCESS ) {
+    if (status != 0) {
         freeaddrinfo(m_addrinfo);
         close(m_socket);
         throw std::runtime_error(strerror(errno));
@@ -149,13 +149,13 @@ std::string Server::get_directory() const {
  * 
  * \return Возвращает копию строки, содержащий директроию.
  */ 
-int extract_address_info(const sockaddr_in &address, std::string &ip, int &port) {
-    char buf[INET_ADDRSTRLEN];
+int extract_address_info(const sockaddr_in& address, std::string &ip, int &port) {
+    char buf[INET_ADDRSTRLEN] = {0};
     port = ntohs(address.sin_port);
     if (inet_ntop(AF_INET, &(address.sin_addr), buf, INET_ADDRSTRLEN) == nullptr)
         return errno;
     ip = buf;
-    return SUCCESS;
+    return 0;
 }
 
 /** \brief Создать ключ из имеющихся парамтров.
@@ -312,7 +312,7 @@ FileBuilder* Server::find_or_create_file_builder(const std::string& key)
         uint32_t marker;
         std::string ip;
         unmake_key(key, ip, port, marker);
-        m_logger << "[INFO] incoming new file from: [" 
+        m_logger << "[INFO] Пришел новый файл от [" 
             << ip << ":" << port << "]" << std::endl; 
         iter_store = m_fb_store.emplace(
             key,
@@ -414,7 +414,7 @@ void Server::work()
     print_headers_as_row();
 #endif
 
-    m_logger << "[INFO] Начат прием паветов. " << std::endl;
+    m_logger << "[INFO] Ожидание приема фалов." << std::endl;
     while(1) {
         memset(&addr, 0, sizeof(sockaddr_in));
         int bytes = timed_recvfrom(buf, MAX_PACKAGE_SIZE, addr, addr_len, 2000);
@@ -476,7 +476,16 @@ int main(int argc, char *argv[])
         print_usage(argv[0]);
         exit(1);
     }
-    int port = std::stoi(std::string(argv[2]));
+    int port = 0;
+    try 
+    {
+        port = std::stoi(std::string(argv[2]));
+    }
+    catch (std::invalid_argument &e)
+    {
+        std::cerr << "Ошибка: значение порта должено быть целом числом." << std::endl;
+        exit(1);
+    }
     Logger log;
     try
     {

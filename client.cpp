@@ -29,7 +29,7 @@ Client::Client(const std::string &addr, int port)
     hint.ai_protocol = IPPROTO_UDP;
     std::string s_port= std::to_string(port);
     int status = getaddrinfo(addr.c_str(), s_port.c_str(), &hint, &m_addrinfo);
-    if (status != SUCCESS || m_addrinfo == nullptr)
+    if (status != 0 || m_addrinfo == nullptr)
     {
         throw std::runtime_error("некорректный адрес или порт");
     }
